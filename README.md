@@ -9,6 +9,8 @@ generate uuid for lua, use libuuid of C library:
 
 notice: uuid1 may expose your mac address of your server
 
+This module based on luajit, must run with luajit
+
 ## Dependence
 
 depend on libuuid-devel, install:

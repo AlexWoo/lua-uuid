@@ -1,5 +1,8 @@
 local ffi = require("ffi")
-local uuid = ffi.load("libuuid.so")
+if jit.os == "Linux"
+then
+    local uuid = ffi.load("libuuid.so", true)
+end
 
 ffi.cdef[[
 typedef unsigned char uuid_t[16];
@@ -24,14 +27,14 @@ end
 
 function _M.uuid1(self)
     local uu = ffi.new("char[16]")
-    uuid.uuid_generate_time(uu)
+    ffi.C.uuid_generate_time(uu)
 
     return setmetatable({ _uu = uu }, mt)
 end
 
 function _M.uuid4(self)
     local uu = ffi.new("char[16]")
-    uuid.uuid_generate_random(uu)
+    ffi.C.uuid_generate_random(uu)
 
     return setmetatable({ _uu = uu }, mt)
 end
@@ -59,7 +62,7 @@ function _M.uuid_str(self)
         return nil
     end
     local str = ffi.new("char[37]")
-    uuid.uuid_unparse(self._uu, str);
+    ffi.C.uuid_unparse(self._uu, str);
     return ffi.string(str)
 end
 
